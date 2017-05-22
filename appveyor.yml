@@ -34,7 +34,7 @@ before_build:
 
 assembly_info:
   patch: true
-  file: .\src\CommonAssemblyInfo.cs
+  file: '.\src\CommonAssemblyInfo.cs'
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
@@ -43,8 +43,8 @@ build_script:
   - dotnet build .\src\Marten.sln --configuration Release
 
 after_build:
-  - dotnet pack ./src/Marten -o artifacts --configuration Release
-  - dotnet pack ./src/Marten.CommandLine -o artifacts --configuration Release
+  - dotnet pack .\src\Marten -o artifacts --configuration Release
+  - dotnet pack .src\Marten.CommandLine -o artifacts --configuration Release
 
 test_script:
   - dotnet test .\src\Marten.Testing\Marten.Testing.csproj --configuration Release
