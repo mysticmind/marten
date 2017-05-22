@@ -4,10 +4,6 @@ branches:
   only:
     - appveyor_integration
 
-platform: Any CPU
-
-configuration: Release
-
 os: Visual Studio 2017
 
 environment:
@@ -36,7 +32,7 @@ before_build:
   - dotnet restore .\src\Marten.sln
 
 build_script:
-  - dotnet build .\src\Marten.sln
+  - dotnet build .\src\Marten.sln --configuration Release
 
 test_script:
-  - dotnet test .\src\Marten.Testing\Marten.Testing.csproj
+  - dotnet test .\src\Marten.Testing\Marten.Testing.csproj --configuration Release
