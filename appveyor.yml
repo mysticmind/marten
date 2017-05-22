@@ -30,8 +30,14 @@ before_build:
   - SET PGPASSWORD=Password12!
   - createdb %PG_DB%
   - psql -d %PG_DB% -c "create extension if not exists plv8;"
-  - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
   - dotnet restore .\src\Marten.sln
+
+assembly_info:
+  patch: true
+  file: .\src\CommonAssemblyInfo.cs
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
 
 build_script:
   - dotnet build .\src\Marten.sln --configuration Release
