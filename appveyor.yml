@@ -30,6 +30,7 @@ before_build:
   - SET PGPASSWORD=Password12!
   - createdb %PG_DB%
   - psql -d %PG_DB% -c "create extension if not exists plv8;"
+  - npm install
   - dotnet restore .\src\Marten.sln
 
 assembly_info:
@@ -47,6 +48,7 @@ after_build:
   - dotnet pack .\src\Marten.CommandLine -o artifacts --configuration Release
 
 test_script:
+  - npm run test
   - dotnet test .\src\Marten.Testing\Marten.Testing.csproj --configuration Release
 
 artifacts:
