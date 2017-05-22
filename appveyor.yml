@@ -37,3 +37,6 @@ before_build:
 
 build_script:
   - dotnet build .\src\Marten.sln
+
+test_script:
+  - dotnet test .\src\Marten.Testing\Marten.Testing.csproj
