@@ -35,6 +35,5 @@ before_build:
   - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
   - dotnet restore .\src\Marten.sln
 
-build:
-  parallel: true
-  project: .\src\Marten.sln
+build_script:
+  - dotnet build .\src\Marten.sln
