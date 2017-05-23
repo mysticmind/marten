@@ -8,6 +8,10 @@ branches:
   only:
   - ci_travis_integration_test
 
+env:
+  global:
+    - marten-testing-database="Host=localhost;Port=5432;Database=marten_test;Username=postgres;Password=Password12!"
+
 addons:
   postgresql: "9.5"
 
