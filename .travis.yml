@@ -10,7 +10,7 @@ branches:
 
 env:
   global:
-    - "marten-testing-database"="Host=localhost;Port=5432;Database=marten_test;Username=postgres;Password=Password12!"
+    - marten_testing_database="Host=localhost;Port=5432;Database=marten_test;Username=postgres;Password=Password12!"
 
 addons:
   postgresql: "9.5"
