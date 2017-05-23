@@ -4,7 +4,7 @@ set -ev
 #npm install
 dotnet --info
 
-dotnet restore ./src/Marten.sln
-dotnet build ./src/Marten.sln --configuration Release
+dotnet restore ./src/Marten.sln --runtime netstandard1.3
+dotnet build ./src/Marten.Testing/Marten.Testing.csproj --framework netcoreapp1.0 --configuration Release
 #npm run test
-#dotnet test .\src\Marten.Testing\Marten.Testing.csproj --configuration Release 
+#dotnet test ./src/Marten.Testing/Marten.Testing.csproj --framework netcoreapp1.0 --configuration Release 
