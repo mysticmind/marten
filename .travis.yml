@@ -26,8 +26,8 @@ install:
   - travis_retry npm install
 
 before_script:
-  - psql -c 'create database $PG_DB;' -U postgres
-  - psql -d $PG_DB -c 'create extension if not exists plv8;'
+  - psql -c 'create database ${PG_DB};' -U postgres
+  - psql -d ${PG_DB} -c 'create extension if not exists plv8;'
   - chmod a+x ./build.sh
 
 script:
