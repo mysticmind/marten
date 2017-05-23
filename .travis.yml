@@ -4,6 +4,10 @@ dist: trusty
 mono: none
 dotnet: 1.0.3
 
+branches:
+  only:
+  - ci_travis_integration_test
+
 # addons:
 #  apt:
 #    sources:
