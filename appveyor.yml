@@ -36,7 +36,7 @@ before_build:
   - psql -d %PG_DB% -c "create extension if not exists plv8;"
   - npm install
   - dotnet --info
-build:
+build_script:
   - rake ci
 after_build:
   - rake pack        
