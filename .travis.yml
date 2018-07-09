@@ -27,4 +27,4 @@ before_script:
   - psql -d marten_test -c 'create extension if not exists plv8;'
 
 script:
-  - rake travis_ci
+  - rake ci

@@ -12,8 +12,7 @@ build_revision = tc_build_number || Time.new.strftime('5%H%M')
 build_number = "#{BUILD_VERSION}.#{build_revision}"
 BUILD_NUMBER = build_number
 
-task :ci => [:connection, :default, :storyteller, 'pack']
-task :travis_ci => [:connection, :default, :storyteller]
+task :ci => [:connection, :default, :storyteller]
 
 task :default => [:mocha, :test, :storyteller]
 
