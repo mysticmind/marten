@@ -13,6 +13,7 @@ build_number = "#{BUILD_VERSION}.#{build_revision}"
 BUILD_NUMBER = build_number
 
 task :ci => [:connection, :default, :storyteller, 'pack']
+task :travis_ci => [:connection, :default, :storyteller]
 
 task :default => [:mocha, :test, :storyteller]
 
