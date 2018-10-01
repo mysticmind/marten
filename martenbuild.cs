@@ -71,12 +71,12 @@ namespace martenbuild
 
             Target("storyteller", DependsOn("compile"), () =>
             {
-                Run("dotnet", $"run --framework netcoreapp2.1 --culture en-US", "src/Marten.Storyteller");
+                Run("dotnet", $"run --culture en-US", "src/Marten.Storyteller");
             });
 
             Target("open_st", DependsOn("compile"), () =>
             {
-                Run("dotnet", $"storyteller open --framework netcoreapp2.1 --culture en-US", "src/Marten.Storyteller");
+                Run("dotnet", $"storyteller open --culture en-US", "src/Marten.Storyteller");
             });
 
             Target("docs", () =>
