@@ -6,9 +6,14 @@ dotnet: 2.1.400
 env:
   global:
     - marten_testing_database="Host=localhost;Port=5432;Database=marten_test;Username=postgres;Password=Password12!"
+    - PGPORT=5433  
 
 addons:
   postgresql: "10"
+  apt:
+    packages:
+    - postgresql-10
+    - postgresql-client-10
 
 before_install:
   - sudo apt-get install postgresql-9.5-plv8
