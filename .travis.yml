@@ -23,4 +23,4 @@ before_script:
   - psql -c 'create database marten_test;' -U postgres
   - psql -d marten_test -c 'create extension if not exists plv8;'
 
-script: ./build.sh ci
+script: bash ./build.sh ci
