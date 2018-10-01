@@ -16,7 +16,7 @@ addons:
     - postgresql-client-10
 
 before_install:
-  - sudo apt-get install postgresql-9.5-plv8
+  - sudo apt-get install postgresql-10-plv8
   - nvm install 6.0.0
 
 install:
