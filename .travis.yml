@@ -22,5 +22,6 @@ install:
 before_script:
   - psql -c 'create database marten_test;' -U postgres
   - psql -d marten_test -c 'create extension if not exists plv8;'
+  - chmod a+x ./build.sh  
 
-script: bash ./build.sh ci
+script: ./build.sh ci
