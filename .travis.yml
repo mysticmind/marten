@@ -1,32 +1,24 @@
-language: csharp
+language: bash
 sudo: required
 dist: trusty
-mono: none
-dotnet: 2.1.400
-env:
-  global:
-    - marten_testing_database="Host=localhost;Port=5432;Database=marten_test;Username=postgres;Password=Password12!"
-    - PGPORT=5433  
 
-addons:
-  postgresql: "10"
-  apt:
-    packages:
-    - postgresql-10
-    - postgresql-client-10
+services:
+  - docker
+
+env:
+  - DOCKER_COMPOSE_VERSION=1.22.0
 
 before_install:
-  - sudo apt-get install postgresql-10-plv8
-  - nvm install 6.0.0
-
-install:
-  - export DOTNET_CLI_TELEMETRY_OPTOUT=1
-  - export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
-  - travis_retry npm install
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose  
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose up -d testdb
 
 before_script:
-  - psql -c 'create database marten_test;' -U postgres
-  - psql -d marten_test -c 'create extension if not exists plv8;'
-  - chmod a+x ./build.sh  
+  - docker exec -it db bash -c 'psql -U testdb -c "create database marten_test;"'
+  - docker exec -it db bash -c 'psql -U testdb -d marten_test -c "create extension if not exists plv8;"'
 
-script: ./build.sh ci
+script: docker-compose run martentest -c "/app/build.sh ci"
+
+after_script:
+  - docker-compose stop

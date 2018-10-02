@@ -1,0 +1,27 @@
+version: "3"
+services:
+  testdb:
+    image: clkao/postgres-plv8:latest
+    container_name: testdb
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: Password12!
+    ports:
+      - 5432:5432
+  martentest:
+    container_name: martentest
+    build: 
+      context: .
+      dockerfile: Dockerfile-martentest
+    volumes:
+      - /c/marten/:/app
+    links:
+      - testdb
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    links:
+      - testdb
