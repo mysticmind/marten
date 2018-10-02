@@ -13,10 +13,13 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 
-script:
+before_script:
   - docker-compose up -d testdb
+  - sleep 15
   - docker-compose exec testdb sh -c "psql -U postgres -c 'create database marten_test;'"
   - docker-compose exec testdb sh -c "psql -U postgres -d marten_test -c 'create extension if not exists plv8;'"
+
+script: 
   - docker-compose run martentest -c "/app/build.sh ci"
 
 after_script:
