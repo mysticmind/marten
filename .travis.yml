@@ -15,7 +15,7 @@ before_install:
   - docker-compose up -d testdb
 
 before_script:
-  - docker-compose exec testdb sh -c "psql -U postgres -c 'create database marten_test;"
+  - docker-compose exec testdb sh -c "psql -U postgres -c 'create database marten_test;'"
   - docker-compose exec testdb sh -c "psql -U postgres -d marten_test -c 'create extension if not exists plv8;'"
 
 script: docker-compose run martentest -c "/app/build.sh ci"
