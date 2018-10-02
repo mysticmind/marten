@@ -19,7 +19,7 @@ before_script:
   - docker-compose exec testdb psql -U postgres -d marten_test -c "create extension if not exists plv8;"
 
 script: 
-  - docker-compose run martentest -c "dotnet run --project /app/martenbuild.csproj -- ci"
+  - docker-compose run martentest -c "/app/build.sh ci"
 
 after_script:
   - docker-compose stop
