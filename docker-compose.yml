@@ -14,7 +14,7 @@ services:
       context: .
       dockerfile: Dockerfile-martentest
     volumes:
-      - /c/marten/:/app
+      - .:/app
     links:
       - testdb
   adminer:
