@@ -16,11 +16,11 @@ before_install:
 before_script:
   - docker-compose up -d testdb
   - sleep 15
-  - docker-compose exec testdb sh -c "psql -U postgres -c 'create database marten_test;'"
-  - docker-compose exec testdb sh -c "psql -U postgres -d marten_test -c 'create extension if not exists plv8;'"
+  - docker-compose exec testdb psql -U postgres -c "create database marten_test;"
+  - docker-compose exec testdb psql -U postgres -d marten_test -c "create extension if not exists plv8;"
 
 script: 
-  - docker-compose run martentest -c "dotnet run -p /app/martenbuild.csproj -- ci"
+  - docker-compose run martentest -c "dotnet run --project /app/martenbuild.csproj -- ci"
 
 after_script:
   - docker-compose stop
