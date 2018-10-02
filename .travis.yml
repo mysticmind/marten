@@ -12,13 +12,12 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose  
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  - docker-compose up -d testdb
 
-before_script:
+script:
+  - docker-compose up -d testdb
   - docker-compose exec testdb sh -c "psql -U postgres -c 'create database marten_test;'"
   - docker-compose exec testdb sh -c "psql -U postgres -d marten_test -c 'create extension if not exists plv8;'"
-
-script: docker-compose run martentest -c "/app/build.sh ci"
+  - docker-compose run martentest -c "/app/build.sh ci"
 
 after_script:
   - docker-compose stop
