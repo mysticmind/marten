@@ -21,4 +21,4 @@ where CAST(d.data ->> 'Number' as integer) > :arg0 LIMIT 5
 
 Also the `Stats()` Linq operator can be used in conjunction with `Include()` and within batch queries. 
 
-Note that Marten does not yet support using `Stats()` within the compiled query.
+Note that Marten does not yet support using `Stats()` within the compiled query. 
