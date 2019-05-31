@@ -23,7 +23,6 @@ variables:
   config: Release
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-  DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER: 0
   dotnetcore_version: 2.1.400
   node_version: 10.x
   pg_db: marten_test
@@ -51,9 +50,8 @@ steps:
   - script: |
       /tmp/docker exec -t -u 0 ci_container_linux \
       sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
-      sudo apt-get update &&
-      sudo apt-get install -y libicu-dev
-      sudo apt-get install -y postgresql-client
+      sudo apt-get update
+      sudo apt-get install -y libicu-dev postgresql-client libcurl3 
       createdb $(pg_db)
       psql -d $(pg_db) -c "create extension if not exists plv8;"
       chmod +x build.sh
