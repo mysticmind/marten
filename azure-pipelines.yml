@@ -43,7 +43,7 @@ services:
 steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '2.1.400'
+      version: $(dotnetcore_version)
   - task: NodeTool@0
     inputs:
       versionSpec: $(node_version)
@@ -58,6 +58,7 @@ steps:
       chmod +x build.sh
       dotnet --info
       npm install
+      echo "<?xml version='1.0' encoding='utf-8'?><configuration><packageSources><add key='MyFeed' value='https://pkgs.dev.azure.com/xyz/_packaging/xyz/nuget/v3/index.json' /></packageSources><packageSourceCredentials><ByThey><add key='Username' value='VSTS' /><add key='ClearTextPassword' value='$(System.AccessToken)' /></ByThey></packageSourceCredentials></configuration>" > NuGet.Config
     displayName: Before build
   - script: ./build.sh ci
     displayName: Build
