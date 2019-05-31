@@ -41,9 +41,11 @@ services:
   postgres: $[ variables['postgresService'] ]
 
 steps:
-  - task: DotNetCoreInstaller@0
+  - task: UseDotNet@2
     inputs:
-      version: $(dotnetcore_version)
+      packageType: sdk
+      version: 2.1.x
+      installationPath: $(Agent.ToolsDirectory)/dotnet
   - task: NodeTool@0
     inputs:
       versionSpec: $(node_version)
