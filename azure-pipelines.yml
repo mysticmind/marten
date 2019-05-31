@@ -23,15 +23,17 @@ variables:
   config: Release
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-  PG_DB: marten_test
+  dotnetcore_version: 2.1.x
+  node_version: 10.x
+  pg_db: marten_test
   marten_testing_database: "Host=localhost;Port=5432;Database=marten_test;Username=postgres;Password=Password12!"
 
 strategy:
   matrix:
-    pg9.6:
-      postgresService: pg9.6
-    pg10:
-      postgresService: pg10
+    # pg9.6:
+    #   postgresService: pg9.6
+    # pg10:
+    #   postgresService: pg10
     pg11:
       postgresService: pg11
 
@@ -39,17 +41,23 @@ services:
   postgres: $[ variables['postgresService'] ]
 
 steps:
+  - task: DotNetCoreInstaller@0
+    inputs:
+      version: $(dotnetcore_version)
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(node_version)
   - script: |
       /tmp/docker exec -t -u 0 ci_container_linux \
       sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
       sudo apt-get update &&
       sudo apt-get install -y libicu-dev
       sudo apt-get install -y postgresql-client
-      createdb $(PG_DB)
-      psql -d $(PG_DB) -c "create extension if not exists plv8;"
-      npm install
+      createdb $(pg_db)
+      psql -d $(pg_db) -c "create extension if not exists plv8;"
       chmod +x build.sh
       dotnet --info
+      npm install
     displayName: Before build
   - script: ./build.sh ci
     displayName: Build
