@@ -23,6 +23,7 @@ variables:
   config: Release
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER: 0
   dotnetcore_version: 2.1.400
   node_version: 10.x
   pg_db: marten_test
@@ -58,7 +59,7 @@ steps:
       chmod +x build.sh
       dotnet --info
       npm install
-      echo "<?xml version='1.0' encoding='utf-8'?><configuration><packageSources><add key='nuget.org' value='https://api.nuget.org/v3/index.json' /></packageSources><packageSourceCredentials><ByThey><add key='Username' value='VSTS' /><add key='ClearTextPassword' value='$(System.AccessToken)' /></ByThey></packageSourceCredentials></configuration>" > NuGet.Config
+      #echo "<?xml version='1.0' encoding='utf-8'?><configuration><packageSources><add key='nuget.org' value='https://api.nuget.org/v3/index.json' /></packageSources><packageSourceCredentials><ByThey><add key='Username' value='VSTS' /><add key='ClearTextPassword' value='$(System.AccessToken)' /></ByThey></packageSourceCredentials></configuration>" > NuGet.Config
     displayName: Before build
   - script: ./build.sh ci
     displayName: Build
