@@ -23,7 +23,7 @@ variables:
   config: Release
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-  dotnetcore_version: 2.1.x
+  dotnetcore_version: 2.1.400
   node_version: 10.x
   pg_db: marten_test
   marten_testing_database: "Host=localhost;Port=5432;Database=marten_test;Username=postgres;Password=Password12!"
@@ -44,7 +44,7 @@ steps:
   - task: UseDotNet@2
     inputs:
       packageType: sdk
-      version: 2.1.400
+      version: $(dotnetcore_version)
       installationPath: $(Agent.ToolsDirectory)/dotnet
   - task: NodeTool@0
     inputs:
