@@ -29,32 +29,39 @@ variables:
   pg_db: marten_test
   marten_testing_database: "Host=localhost;Port=5432;Database=marten_test;Username=postgres;Password=Password12!"
 
-strategy:
-  matrix:
-    pg9.6:
-      postgresService: pg9.6
-    pg10:
-      postgresService: pg10
-    pg11:
-      postgresService: pg11
+jobs:
+  - job: build_job
+    displayName: Build Job
+    strategy:
+      matrix:
+        pg9.6:
+          postgresService: pg9.6
+        pg10:
+          postgresService: pg10
+        pg11:
+          postgresService: pg11
 
-services:
-  postgres: $[ variables['postgresService'] ]
+    services:
+      postgres: $[ variables['postgresService'] ]
 
-steps:
-  - task: DotNetCoreInstaller@0
-    inputs:
-      version: $(dotnet_core_version)
-  - task: NodeTool@0
-    inputs:
-      versionSpec: $(node_version)
-  - script: |
-      sudo apt-get update
-      sudo apt-get install -y libicu-dev libcurl3 postgresql-client 
-      createdb $(pg_db)
-      psql -d $(pg_db) -c "create extension if not exists plv8;"
-      chmod +x build.sh
-      dotnet --info
-    displayName: Prepare Build
-  - script: ./build.sh ci
-    displayName: Build
+    steps:
+      - task: DotNetCoreInstaller@0
+        inputs:
+          version: $(dotnet_core_version)
+      - task: NodeTool@0
+        inputs:
+          versionSpec: $(node_version)
+      - script: |
+          sudo apt-get update
+          sudo apt-get install -y libicu-dev libcurl3 postgresql-client
+          createdb $(pg_db)
+          psql -d $(pg_db) -c "create extension if not exists plv8;"
+          chmod +x build.sh
+          dotnet --info
+        displayName: Prepare Build
+      - script: ./build.sh ci
+        displayName: Build
+  - job: publish_job
+    displayName: Publish Job
+    steps:
+      - script: ./build.sh pack
