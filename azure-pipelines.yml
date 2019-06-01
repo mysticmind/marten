@@ -62,15 +62,30 @@ jobs:
       #   displayName: Prepare Build
       # - script: ./build.sh ci
       #   displayName: Build
-  # - job: Publish
-  #   dependsOn: Build
-  #   pool:
-  #     vmImage: 'ubuntu-latest'
-  #   steps:
-  #     - task: DotNetCoreInstaller@0
-  #       inputs:
-  #         version: $(dotnet_core_version)
-  #     - script: |
-  #         echo $(Build.SourceBranch)
-  #         ./build.sh pack
+  - job: Publish
+    dependsOn: Build
+    # run publish only if all build jobs succeed and a GitHub tag is created
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - task: DotNetCoreInstaller@0
+        inputs:
+          version: $(dotnet_core_version)
+      - script: |
+          ./build.sh pack
+      - task: DotNetCoreCLI@2
+          inputs:
+            command: 'push'
+            nuGetFeedType: 'external'
+            packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.nupkg'
+            publishFeedCredentials: 'NuGetServiceConnection'
+      - task: DotNetCoreCLI@2
+          inputs:
+            command: 'push'
+            packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.snupkg'
+            publishFeedCredentials: 'NuGetServiceConnection'
+
+
+
 
