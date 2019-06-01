@@ -45,8 +45,8 @@ jobs:
         #   postgresService: pg9.6
         # pg10:
         #   postgresService: pg10
-        # pg11:
-        #   postgresService: pg11
+        pg11:
+          postgresService: pg11
     services:
       postgres: $[ variables['postgresService'] ]
     steps:
