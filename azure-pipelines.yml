@@ -15,7 +15,7 @@ resources:
       image: clkao/postgres-plv8:9.6
 
 pool:
-  vmImage: 'ubuntu-16.04'
+  vmImage: 'ubuntu-latest'
 
 container: ci_container_linux
 
@@ -41,12 +41,12 @@ services:
   postgres: $[ variables['postgresService'] ]
 
 steps:
-  - task: DotNetCoreInstaller@0
-    inputs:
-      version: $(dotnetcore_version)
-  - task: NodeTool@0
-    inputs:
-      versionSpec: $(node_version)
+  # - task: DotNetCoreInstaller@0
+  #   inputs:
+  #     version: $(dotnetcore_version)
+  # - task: NodeTool@0
+  #   inputs:
+  #     versionSpec: $(node_version)
   - script: |
       /tmp/docker exec -t -u 0 ci_container_linux \
       sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
@@ -55,8 +55,6 @@ steps:
       createdb $(pg_db)
       psql -d $(pg_db) -c "create extension if not exists plv8;"
       dotnet --info
-      npm install
-      #echo "<?xml version='1.0' encoding='utf-8'?><configuration><packageSources><add key='nuget.org' value='https://api.nuget.org/v3/index.json' /></packageSources><packageSourceCredentials><ByThey><add key='Username' value='VSTS' /><add key='ClearTextPassword' value='$(System.AccessToken)' /></ByThey></packageSourceCredentials></configuration>" > NuGet.Config
     displayName: Before build
   - script: dotnet run -p martenbuild.csproj -- ci
     displayName: Build
