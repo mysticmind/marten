@@ -4,9 +4,6 @@ trigger:
 
 resources:
   containers:
-    # - container: ci_container_linux
-    #   image: ubuntu:16.04
-    #   options: "--name ci_container_linux -v /usr/bin/docker:/tmp/docker:ro"
     - container: pg11
       image: ionx/postgres-plv8:11.1
       ports:
@@ -23,13 +20,11 @@ resources:
 pool:
   vmImage: 'ubuntu-latest'
 
-#container: ci_container_linux
-
 variables:
   config: Release
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-  dotnetcore_version: 2.1.400
+  dotnet_core_version: 2.1.400
   node_version: 10.x
   pg_db: marten_test
   marten_testing_database: "Host=localhost;Port=5432;Database=marten_test;Username=postgres;Password=Password12!"
@@ -49,18 +44,17 @@ services:
 steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: $(dotnetcore_version)
+      version: $(dotnet_core_version)
   - task: NodeTool@0
     inputs:
       versionSpec: $(node_version)
   - script: |
-      #/tmp/docker exec -t -u 0 ci_container_linux \
-      #sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
       sudo apt-get update
       sudo apt-get install -y libicu-dev libcurl3 postgresql-client 
       createdb $(pg_db)
       psql -d $(pg_db) -c "create extension if not exists plv8;"
+      chmod +x build.sh
       dotnet --info
     displayName: Prepare Build
-  - script: dotnet run -p martenbuild.csproj -- ci
+  - script: ./build.sh ci
     displayName: Build
