@@ -1,6 +1,11 @@
 trigger:
-  - master
-  - azure_pipelines_ci
+  batch: true
+  paths:
+    include:
+      - '*'
+    exclude:
+      - README.md
+      - documentation/*
 
 resources:
   containers:
@@ -36,8 +41,8 @@ jobs:
         #   postgresService: pg9.6
         # pg10:
         #   postgresService: pg10
-        pg11:
-          postgresService: pg11
+        # pg11:
+        #   postgresService: pg11
     services:
       postgres: $[ variables['postgresService'] ]
     steps:
@@ -64,5 +69,7 @@ jobs:
       - task: DotNetCoreInstaller@0
         inputs:
           version: $(dotnet_core_version)
-      - script: ./build.sh pack
+      - script: |
+          echo $(Build.Reason)
+          ./build.sh pack
 
