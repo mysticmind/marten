@@ -4,9 +4,9 @@ trigger:
 
 resources:
   containers:
-    - container: ci_container_linux
-      image: ubuntu:16.04
-      options: "--name ci_container_linux -v /usr/bin/docker:/tmp/docker:ro"
+    # - container: ci_container_linux
+    #   image: ubuntu:16.04
+    #   options: "--name ci_container_linux -v /usr/bin/docker:/tmp/docker:ro"
     - container: pg11
       image: ionx/postgres-plv8:11.1
     - container: pg10
@@ -17,7 +17,7 @@ resources:
 pool:
   vmImage: 'ubuntu-latest'
 
-container: ci_container_linux
+#container: ci_container_linux
 
 variables:
   config: Release
@@ -41,17 +41,17 @@ services:
   postgres: $[ variables['postgresService'] ]
 
 steps:
-  # - task: DotNetCoreInstaller@0
-  #   inputs:
-  #     version: $(dotnetcore_version)
-  # - task: NodeTool@0
-  #   inputs:
-  #     versionSpec: $(node_version)
+  - task: DotNetCoreInstaller@0
+    inputs:
+      version: $(dotnetcore_version)
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(node_version)
   - script: |
-      /tmp/docker exec -t -u 0 ci_container_linux \
-      sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
-      sudo apt-get update
-      sudo apt-get install -y libicu-dev libcurl3 postgresql-client 
+      #/tmp/docker exec -t -u 0 ci_container_linux \
+      #sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
+      apt-get update
+      apt-get install -y libicu-dev libcurl3 postgresql-client 
       createdb $(pg_db)
       psql -d $(pg_db) -c "create extension if not exists plv8;"
       dotnet --info
