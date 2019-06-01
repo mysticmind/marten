@@ -1,5 +1,9 @@
 trigger:
   batch: true
+  branches:
+    include:
+      - master
+      - azure_pipelines_ci 
   paths:
     include:
       - '*'
