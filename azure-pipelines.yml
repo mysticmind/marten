@@ -4,15 +4,7 @@ trigger:
     include:
       - master
       - azure_pipelines_ci
-  tags:
-    include:
-      - v*
-  paths:
-    include:
-      - '*'
-    exclude:
-      - README.md
-      - documentation/*
+      - refs/tags/*
 
 resources:
   containers:
@@ -54,30 +46,31 @@ jobs:
     services:
       postgres: $[ variables['postgresService'] ]
     steps:
-      - task: DotNetCoreInstaller@0
-        inputs:
-          version: $(dotnet_core_version)
-      - task: NodeTool@0
-        inputs:
-          versionSpec: $(node_version)
-      - script: |
-          sudo apt-get update
-          sudo apt-get install -y libicu-dev libcurl3 postgresql-client 
-          createdb $(pg_db)
-          psql -d $(pg_db) -c "create extension if not exists plv8;"
-          dotnet --info
-        displayName: Prepare Build
-      - script: ./build.sh ci
-        displayName: Build
-  - job: Publish
-    dependsOn: Build
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-      - task: DotNetCoreInstaller@0
-        inputs:
-          version: $(dotnet_core_version)
-      - script: |
-          echo $(Build.SourceBranch)
-          ./build.sh pack
+      - script: echo $(Build.SourceBranch)
+      # - task: DotNetCoreInstaller@0
+      #   inputs:
+      #     version: $(dotnet_core_version)
+      # - task: NodeTool@0
+      #   inputs:
+      #     versionSpec: $(node_version)
+      # - script: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y libicu-dev libcurl3 postgresql-client 
+      #     createdb $(pg_db)
+      #     psql -d $(pg_db) -c "create extension if not exists plv8;"
+      #     dotnet --info
+      #   displayName: Prepare Build
+      # - script: ./build.sh ci
+      #   displayName: Build
+  # - job: Publish
+  #   dependsOn: Build
+  #   pool:
+  #     vmImage: 'ubuntu-latest'
+  #   steps:
+  #     - task: DotNetCoreInstaller@0
+  #       inputs:
+  #         version: $(dotnet_core_version)
+  #     - script: |
+  #         echo $(Build.SourceBranch)
+  #         ./build.sh pack
 
