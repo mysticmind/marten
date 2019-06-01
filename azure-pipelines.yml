@@ -51,13 +51,12 @@ steps:
       /tmp/docker exec -t -u 0 ci_container_linux \
       sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
       sudo apt-get update
-      sudo apt-get install -y libicu-dev postgresql-client libcurl3 
+      sudo apt-get install -y libicu-dev libcurl3 postgresql-client 
       createdb $(pg_db)
       psql -d $(pg_db) -c "create extension if not exists plv8;"
-      chmod +x build.sh
       dotnet --info
       npm install
       #echo "<?xml version='1.0' encoding='utf-8'?><configuration><packageSources><add key='nuget.org' value='https://api.nuget.org/v3/index.json' /></packageSources><packageSourceCredentials><ByThey><add key='Username' value='VSTS' /><add key='ClearTextPassword' value='$(System.AccessToken)' /></ByThey></packageSourceCredentials></configuration>" > NuGet.Config
     displayName: Before build
-  - script: ./build.sh ci
+  - script: dotnet run -p martenbuild.csproj -- ci
     displayName: Build
