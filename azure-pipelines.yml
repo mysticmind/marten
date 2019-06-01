@@ -50,11 +50,11 @@ steps:
   - script: |
       #/tmp/docker exec -t -u 0 ci_container_linux \
       #sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
-      apt-get update
-      apt-get install -y libicu-dev libcurl3 postgresql-client 
+      sudo apt-get update
+      sudo apt-get install -y libicu-dev libcurl3 postgresql-client 
       createdb $(pg_db)
       psql -d $(pg_db) -c "create extension if not exists plv8;"
       dotnet --info
-    displayName: Before build
+    displayName: Prepare Build
   - script: dotnet run -p martenbuild.csproj -- ci
     displayName: Build
