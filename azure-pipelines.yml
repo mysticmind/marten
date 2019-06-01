@@ -4,7 +4,7 @@ trigger:
     include:
       - master
       - azure_pipelines_ci
-      - 'refs/tags/*'
+      - 'releases/tag/*'
   paths:
     include:
       - '*'
@@ -76,6 +76,6 @@ jobs:
         inputs:
           version: $(dotnet_core_version)
       - script: |
-          echo $(Build.Reason)
+          echo $(Build.SourceBranch)
           ./build.sh pack
 
