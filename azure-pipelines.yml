@@ -75,16 +75,16 @@ jobs:
       - script: |
           ./build.sh pack
       - task: DotNetCoreCLI@2
-          inputs:
-            command: 'push'
-            nuGetFeedType: 'external'
-            packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.nupkg'
-            publishFeedCredentials: 'NuGetServiceConnection'
+        inputs:
+          command: 'push'
+          nuGetFeedType: 'external'
+          packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.nupkg'
+          publishFeedCredentials: 'NuGetServiceConnection'
       - task: DotNetCoreCLI@2
-          inputs:
-            command: 'push'
-            packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.snupkg'
-            publishFeedCredentials: 'NuGetServiceConnection'
+        inputs:
+          command: 'push'
+          packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.snupkg'
+          publishFeedCredentials: 'NuGetServiceConnection'
 
 
 
