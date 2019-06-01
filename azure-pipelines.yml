@@ -50,7 +50,7 @@ jobs:
       postgres: $[ variables['postgresService'] ]
     steps:
       - task: DotNetCoreInstaller@0
-        displayName: Installer.Net Core
+        displayName: Install .Net Core
         inputs:
           version: $(dotnet_core_version)
       - task: NodeTool@0
@@ -60,9 +60,9 @@ jobs:
       - script: |
           #sudo apt-get update
           #sudo apt-get install -y libicu-dev libcurl3 postgresql-client 
-          docker exec postgres createdb $(pg_db)
-          docker exec postgres psql -d $(pg_db) -c "create extension if not exists plv8;"
-        displayName: Prepare Build
+          docker exec postgres psql -U postgres 'create database $(pg_db);'
+          docker exec postgres psql -U postgres -d $(pg_db) -c "create extension if not exists plv8;"
+        displayName: Create db and add plv8 extension
       - script: ./build.sh ci
         displayName: Build
   - job: Publish
