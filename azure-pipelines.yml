@@ -9,10 +9,16 @@ resources:
     #   options: "--name ci_container_linux -v /usr/bin/docker:/tmp/docker:ro"
     - container: pg11
       image: ionx/postgres-plv8:11.1
+      ports:
+        - 5432:5432
     - container: pg10
       image: ionx/postgres-plv8:10.6
+      ports:
+        - 5432:5432
     - container: pg9.6
       image: clkao/postgres-plv8:9.6
+      ports:
+        - 5432:5432
 
 pool:
   vmImage: 'ubuntu-latest'
