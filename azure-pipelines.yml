@@ -4,9 +4,7 @@ trigger:
     include:
       - master
       - azure_pipelines_ci
-  tags:
-    include:
-      - '*' 
+      - refs/tags/*
   paths:
     include:
       - '*'
