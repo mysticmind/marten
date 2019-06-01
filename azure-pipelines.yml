@@ -36,10 +36,10 @@ variables:
 
 strategy:
   matrix:
-    # pg9.6:
-    #   postgresService: pg9.6
-    # pg10:
-    #   postgresService: pg10
+    pg9.6:
+      postgresService: pg9.6
+    pg10:
+      postgresService: pg10
     pg11:
       postgresService: pg11
 
