@@ -2,62 +2,63 @@ trigger:
   - master
   - azure_pipelines_ci
 
+resources:
+  containers:
+    - container: pg11
+      image: ionx/postgres-plv8:11.1
+      ports:
+        - 5432:5432
+    - container: pg10
+      image: ionx/postgres-plv8:10.6
+      ports:
+        - 5432:5432
+    - container: pg9.6
+      image: clkao/postgres-plv8:9.6
+      ports:
+        - 5432:5432
+
 pool:
   vmImage: 'ubuntu-latest'
 
-jobs:
-  - job: Build
-    variables:
-      config: Release
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-      dotnet_core_version: 2.1.400
-      node_version: 10.x
-      pg_db: marten_test
-      marten_testing_database: "Host=localhost;Port=5432;Database=marten_test;Username=postgres;Password=Password12!"
-    resources:
-      containers:
-        - container: pg11
-          image: ionx/postgres-plv8:11.1
-          ports:
-            - 5432:5432
-        - container: pg10
-          image: ionx/postgres-plv8:10.6
-          ports:
-            - 5432:5432
-        - container: pg9.6
-          image: clkao/postgres-plv8:9.6
-          ports:
-            - 5432:5432
-    strategy:
-      matrix:
-        pg9.6:
-          postgresService: pg9.6
-        pg10:
-          postgresService: pg10
-        pg11:
-          postgresService: pg11
-    services:
-      postgres: $[ variables['postgresService'] ]
-    steps:
-      - task: DotNetCoreInstaller@0
-        inputs:
-          version: $(dotnet_core_version)
-      - task: NodeTool@0
-        inputs:
-          versionSpec: $(node_version)
-      - script: |
-          sudo apt-get update
-          sudo apt-get install -y libicu-dev libcurl3 postgresql-client
-          createdb $(pg_db)
-          psql -d $(pg_db) -c "create extension if not exists plv8;"
-          chmod +x build.sh
-          dotnet --info
-        displayName: Prepare Build
-      - script: ./build.sh ci
-        displayName: Build
+variables:
+  config: Release
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  dotnet_core_version: 2.1.400
+  node_version: 10.x
+  pg_db: marten_test
+  marten_testing_database: "Host=localhost;Port=5432;Database=marten_test;Username=postgres;Password=Password12!"
 
-  - job: Publish
-    dependsOn: Build
-    steps:
-      - script: ./build.sh pack
+strategy:
+  matrix:
+    pg9.6:
+      postgresService: pg9.6
+    pg10:
+      postgresService: pg10
+    pg11:
+      postgresService: pg11
+  runOnce:
+    deploy:
+      steps:
+        - script: dotnet info
+
+services:
+  postgres: $[ variables['postgresService'] ]
+
+steps:
+  - task: DotNetCoreInstaller@0
+    inputs:
+      version: $(dotnet_core_version)
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(node_version)
+  - script: |
+      sudo apt-get update
+      sudo apt-get install -y libicu-dev libcurl3 postgresql-client 
+      createdb $(pg_db)
+      psql -d $(pg_db) -c "create extension if not exists plv8;"
+      chmod +x build.sh
+      dotnet --info
+    displayName: Prepare Build
+  - script: ./build.sh ci
+    displayName: Build
