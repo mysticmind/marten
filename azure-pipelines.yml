@@ -47,21 +47,20 @@ jobs:
       postgres: $[ variables['postgresService'] ]
     steps:
       - script: echo $(Build.SourceBranch)
-      # - task: DotNetCoreInstaller@0
-      #   inputs:
-      #     version: $(dotnet_core_version)
-      # - task: NodeTool@0
-      #   inputs:
-      #     versionSpec: $(node_version)
-      # - script: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y libicu-dev libcurl3 postgresql-client 
-      #     createdb $(pg_db)
-      #     psql -d $(pg_db) -c "create extension if not exists plv8;"
-      #     dotnet --info
-      #   displayName: Prepare Build
-      # - script: ./build.sh ci
-      #   displayName: Build
+      - task: DotNetCoreInstaller@0
+        inputs:
+          version: $(dotnet_core_version)
+      - task: NodeTool@0
+        inputs:
+          versionSpec: $(node_version)
+      - script: |
+          #sudo apt-get update
+          #sudo apt-get install -y libicu-dev libcurl3 postgresql-client 
+          docker exec postgres createdb $(pg_db)
+          docker exec postgres psql -d $(pg_db) -c "create extension if not exists plv8;"
+        displayName: Prepare Build
+      - script: ./build.sh ci
+        displayName: Build
   - job: Publish
     dependsOn: Build
     # run publish only if all build jobs succeed and a GitHub tag is created
@@ -74,13 +73,13 @@ jobs:
           version: $(dotnet_core_version)
       - script: |
           ./build.sh pack
-      - task: DotNetCoreCLI@2
+      - task: NuGetCommand@2
         inputs:
           command: 'push'
           nuGetFeedType: 'external'
           packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.nupkg'
           publishFeedCredentials: 'NuGetServiceConnection'
-      - task: DotNetCoreCLI@2
+      - task: NuGetCommand@2
         inputs:
           command: 'push'
           packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.snupkg'
