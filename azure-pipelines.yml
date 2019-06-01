@@ -40,10 +40,10 @@ jobs:
       vmImage: 'ubuntu-latest'
     strategy:
       matrix:
-        # pg9.6:
-        #   postgresService: pg9.6
-        # pg10:
-        #   postgresService: pg10
+        pg9.6:
+          postgresService: pg9.6
+        pg10:
+          postgresService: pg10
         pg11:
           postgresService: pg11
     services:
@@ -58,38 +58,36 @@ jobs:
         inputs:
           versionSpec: $(node_version)
       - script: |
-          #sudo apt-get update
-          #sudo apt-get install -y libicu-dev libcurl3 postgresql-client
           PG_CONTAINER_NAME=$(docker ps --filter expose=5432/tcp --format {{.Names}})
-          echo $PG_CONTAINER_NAME
           docker exec $PG_CONTAINER_NAME psql -U postgres -c 'create database $(pg_db);'
           docker exec $PG_CONTAINER_NAME psql -U postgres -d $(pg_db) -c "create extension if not exists plv8;"
         displayName: Create db and add plv8 extension
       - script: ./build.sh ci
         displayName: Build
-  - job: Publish
-    dependsOn: Build
-    # run publish only if all build jobs succeed and a GitHub tag is created
-    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-      - task: DotNetCoreInstaller@0
-        displayName: Install .Net Core
-        inputs:
-          version: $(dotnet_core_version)
-      - script: ./build.sh pack
-        displayName: Create NuGet Packages
-      - task: NuGetCommand@2
-        displayName: Publish packages to NuGet
-        inputs:
-          command: 'push'
-          nuGetFeedType: 'external'
-          packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.nupkg'
-          publishFeedCredentials: 'NuGetServiceConnection'
-      - task: NuGetCommand@2
-        displayName: Publish symbol packages to NuGet
-        inputs:
-          command: 'push'
-          packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.snupkg'
-          publishFeedCredentials: 'NuGetServiceConnection'
+  # Publish job will be enabled later
+  # - job: Publish
+  #   dependsOn: Build
+  #   # run publish only if all build jobs succeed and a GitHub tag is created
+  #   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+  #   pool:
+  #     vmImage: 'ubuntu-latest'
+  #   steps:
+  #     - task: DotNetCoreInstaller@0
+  #       displayName: Install .Net Core
+  #       inputs:
+  #         version: $(dotnet_core_version)
+  #     - script: ./build.sh pack
+  #       displayName: Create NuGet Packages
+  #     - task: NuGetCommand@2
+  #       displayName: Publish packages to NuGet
+  #       inputs:
+  #         command: 'push'
+  #         nuGetFeedType: 'external'
+  #         packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.nupkg'
+  #         publishFeedCredentials: 'NuGetServiceConnection'
+  #     - task: NuGetCommand@2
+  #       displayName: Publish symbol packages to NuGet
+  #       inputs:
+  #         command: 'push'
+  #         packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.snupkg'
+  #         publishFeedCredentials: 'NuGetServiceConnection'
