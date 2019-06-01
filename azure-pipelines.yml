@@ -10,14 +10,17 @@ resources:
   containers:
     - container: pg11
       image: ionx/postgres-plv8:11.1
+      options: --name postgres
       ports:
         - 5432:5432
     - container: pg10
       image: ionx/postgres-plv8:10.6
+      options: --name postgres
       ports:
         - 5432:5432
     - container: pg9.6
       image: clkao/postgres-plv8:9.6
+      options: --name postgres
       ports:
         - 5432:5432
 
@@ -46,11 +49,12 @@ jobs:
     services:
       postgres: $[ variables['postgresService'] ]
     steps:
-      - script: echo $(Build.SourceBranch)
       - task: DotNetCoreInstaller@0
+        displayName: Installer.Net Core
         inputs:
           version: $(dotnet_core_version)
       - task: NodeTool@0
+        displayName: Install Node.js
         inputs:
           versionSpec: $(node_version)
       - script: |
@@ -69,22 +73,21 @@ jobs:
       vmImage: 'ubuntu-latest'
     steps:
       - task: DotNetCoreInstaller@0
+        displayName: Install .Net Core
         inputs:
           version: $(dotnet_core_version)
-      - script: |
-          ./build.sh pack
+      - script: ./build.sh pack
+        displayName: Create NuGet Packages
       - task: NuGetCommand@2
+        displayName: Publish packages to NuGet
         inputs:
           command: 'push'
           nuGetFeedType: 'external'
           packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.nupkg'
           publishFeedCredentials: 'NuGetServiceConnection'
       - task: NuGetCommand@2
+        displayName: Publish symbol packages to NuGet
         inputs:
           command: 'push'
           packagesToPush: '$(Build.Repository.LocalPath)/artifacts/*.snupkg'
           publishFeedCredentials: 'NuGetServiceConnection'
-
-
-
-
