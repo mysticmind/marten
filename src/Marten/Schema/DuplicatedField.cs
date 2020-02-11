@@ -162,7 +162,6 @@ namespace Marten.Schema
         private static StoreOptions GetStoreOptions(EnumStorage enumStorage)
         {
             var storeOptions = new StoreOptions();
-            storeOptions.UseDefaultSerialization(enumStorage);
             return storeOptions;
         }
     }

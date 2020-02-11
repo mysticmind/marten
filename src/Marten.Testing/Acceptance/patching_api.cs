@@ -16,7 +16,7 @@ namespace Marten.Testing.Acceptance
             StoreOptions(_ =>
             {
                 _.DatabaseSchemaName = "other";
-                _.UseDefaultSerialization(EnumStorage.AsString);
+                _.UseJsonNetSerializer(enumStorage: EnumStorage.AsString);
             });
         }
 

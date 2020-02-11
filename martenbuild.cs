@@ -85,8 +85,8 @@ namespace martenbuild
         {
             Run("git", $"clone -b {branchName} https://github.com/jasperfx/marten.git {InitializeDirectory(docTargetDir)}");
             // if you are not using git --global config, un-comment the block below, update and use it
-            // Run("git", "config user.email user_email", docTargetDir);
-            // Run("git", "config user.name user_name", docTargetDir);
+            Run("git", "config user.email babu.annamalai@gmail.com", docTargetDir);
+            Run("git", "config user.name mysticmind", docTargetDir);
 
             if (exportWithGithubProjectPrefix)
                 Run("dotnet", $"stdocs export {docTargetDir} ProjectWebsite -d documentation -c src -v {BUILD_VERSION} --project marten");

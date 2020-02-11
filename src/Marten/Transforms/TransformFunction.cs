@@ -45,7 +45,7 @@ namespace Marten.Transforms
             return $"DROP FUNCTION IF EXISTS {Identifier}({signature});";
         }
 
-        public string GenerateFunction()
+        public virtual string GenerateFunction()
         {
             var defaultExport = "{export: {}}";
 

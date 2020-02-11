@@ -159,13 +159,13 @@ namespace Marten
 
         internal void CreatePatching()
         {
-            if (PLV8Enabled)
-            {
-                var patching = new TransformFunction(this, PatchDoc, SchemaBuilder.GetJavascript(this, "mt_patching"));
-                patching.OtherArgs.Add("patch");
+            /*var patching = PLV8Enabled
+                ? new TransformFunction(this, PatchDoc, SchemaBuilder.GetJavascript(this, "mt_patching"), true, "plv8")
+                : new TransformFunction(this, PatchDoc, SchemaBuilder.GetSqlScript(this.DatabaseSchemaName, "mt_patch_doc"), false, "plpgsql");*/
 
-                Transforms.Load(patching);
-            }
+            var patching = new TransformSqlFunction(this, PatchDoc, SchemaBuilder.GetSqlScript(this.DatabaseSchemaName, "mt_patch_doc"));
+            patching.OtherArgs.Add("patch");
+            Transforms.Load(patching);
         }
 
         internal ChildDocument GetChildDocument(string locator, Type documentType)
@@ -213,31 +213,6 @@ namespace Marten
         }
 
         /// <summary>
-        ///     Use the default serialization (ilmerged Newtonsoft.Json) with Enum values
-        ///     stored as either integers or strings
-        /// </summary>
-        /// <param name="enumStorage"></param>
-        /// <param name="casing">Casing style to be used in serialization</param>
-        /// <param name="collectionStorage">Allow to set collection storage as raw arrays (without explicit types)</param>
-        /// <param name="nonPublicMembersStorage">Allow non public members to be used during deserialization</param>
-        public void UseDefaultSerialization(
-            EnumStorage enumStorage = EnumStorage.AsInteger,
-            Casing casing = Casing.Default,
-            CollectionStorage collectionStorage = CollectionStorage.Default,
-            NonPublicMembersStorage nonPublicMembersStorage = NonPublicMembersStorage.Default
-        )
-        {
-            Serializer(
-                new JsonNetSerializer
-                {
-                    EnumStorage = enumStorage,
-                    Casing = casing,
-                    CollectionStorage = collectionStorage,
-                    NonPublicMembersStorage = nonPublicMembersStorage
-                });
-        }
-
-        /// <summary>
         ///     Override the JSON serialization by an ISerializer of type "T"
         /// </summary>
         /// <typeparam name="T">The ISerializer type</typeparam>
@@ -248,7 +223,7 @@ namespace Marten
 
         public ISerializer Serializer()
         {
-            return _serializer ?? new JsonNetSerializer();
+            return _serializer;
         }
 
         public IMartenLogger Logger()

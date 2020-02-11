@@ -1,4 +1,5 @@
 using System;
+using Marten.Json.NET;
 using Marten.Services;
 using Marten.Util;
 using NodaTime;

@@ -44,7 +44,7 @@ namespace Marten.Services
 
             using (var conn = _store.Tenancy.Default.OpenConnection())
             {
-                return conn.ExplainQuery(cmd);
+                return conn.ExplainQuery(_store.Serializer, cmd);
             }
         }
 

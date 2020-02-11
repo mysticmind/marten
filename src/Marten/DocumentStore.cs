@@ -75,6 +75,10 @@ namespace Marten
             Options = options;
             _logger = options.Logger();
             Serializer = options.Serializer();
+
+            // TODO: throw an exception if serializer is not set
+
+
             _retryPolicy = options.RetryPolicy();
 
             if (options.CreateDatabases != null)

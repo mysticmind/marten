@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Marten.Services.Json;
+using Marten.Json.NET;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;

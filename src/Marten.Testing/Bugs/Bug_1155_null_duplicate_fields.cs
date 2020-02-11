@@ -1,4 +1,5 @@
 using System.Linq;
+using Marten.Json.NET;
 using Marten.Services;
 using Xunit;
 
@@ -11,7 +12,7 @@ namespace Marten.Testing.Bugs
         {
             StoreOptions(_ =>
             {
-                _.Serializer(new JsonNetSerializer { EnumStorage = EnumStorage.AsInteger });
+                _.UseJsonNetSerializer(enumStorage: EnumStorage.AsInteger);
                 _.Schema.For<Target>().Duplicate(t => t.NullableColor);
             });
 

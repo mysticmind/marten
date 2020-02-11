@@ -41,6 +41,7 @@
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
     </ItemGroup>
     <ItemGroup>
+        <ProjectReference Include="..\Marten.Json.NET\Marten.Json.NET.csproj" />
         <ProjectReference Include="..\Marten\Marten.csproj" />
     </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace Marten.Services.Json
+namespace Marten.Json.NET
 {
     /// <summary>
     /// Serialize collection type property to JSON array using a custom Newtonsoft.Json JsonConverter
@@ -37,8 +37,8 @@ namespace Marten.Services.Json
         public override bool CanConvert(Type objectType)
         {
             return _types.Contains(objectType)
-                 || objectType.IsArray
-                 || (objectType.IsGenericType && _types.Contains(objectType.GetGenericTypeDefinition()));
+                   || objectType.IsArray
+                   || (objectType.IsGenericType && _types.Contains(objectType.GetGenericTypeDefinition()));
         }
     }
 }

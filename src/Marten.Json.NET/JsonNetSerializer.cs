@@ -1,11 +1,10 @@
-using System;
+﻿using System;
 using System.IO;
 using Baseline;
-using Marten.Services.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Marten.Services
+namespace Marten.Json.NET
 {
     public class JsonNetSerializer: ISerializer
     {

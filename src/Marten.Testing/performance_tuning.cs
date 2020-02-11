@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Baseline;
+using Marten.Json.NET;
 using Marten.Linq;
 using Marten.Schema;
 using Marten.Services;
@@ -18,7 +19,7 @@ namespace Marten.Testing
     // SAMPLE: JilSerializer
     public class JilSerializer : ISerializer
     {
-        private readonly Options _options 
+        private readonly Options _options
             = new Options(dateFormat: DateTimeFormat.ISO8601, includeInherited:true);
 
         public void ToJson(object document, TextWriter writer)
@@ -91,7 +92,7 @@ var store = DocumentStore.For(_ =>
 
         public static void custom_newtonsoft()
         {
-            
+
         }
     }
 
@@ -185,7 +186,7 @@ var store = DocumentStore.For(_ =>
         private void create_timings(int length)
         {
             var data = Target.GenerateRandomData(length).ToArray();
-            
+
             time_query<JsonNetSerializer, JsonLocatorOnly>(data);
             time_query<JsonNetSerializer, JsonBToRecord>(data);
             time_query<JsonNetSerializer, DateIsSearchable>(data);
@@ -194,7 +195,7 @@ var store = DocumentStore.For(_ =>
             time_query<TestsSerializer, JsonLocatorOnly>(data);
             time_query<TestsSerializer, JsonBToRecord>(data);
             time_query<TestsSerializer, DateIsSearchable>(data);
-            
+
             time_query<TestsSerializer, ContainmentOperator>(data);
         }
 

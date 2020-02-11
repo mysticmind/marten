@@ -2,7 +2,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Marten.Services.Json
+namespace Marten.Json.NET
 {
     public class JsonNetContractResolver: DefaultContractResolver
     {

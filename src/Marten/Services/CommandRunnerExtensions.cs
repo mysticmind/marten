@@ -18,10 +18,8 @@ namespace Marten.Services
             return runner.Execute(cmd => cmd.WithText(sql).ExecuteNonQuery());
         }
 
-        public static QueryPlan ExplainQuery(this IManagedConnection runner, NpgsqlCommand cmd, Action<IConfigureExplainExpressions> configureExplain = null)
+        public static QueryPlan ExplainQuery(this IManagedConnection runner, ISerializer serializer, NpgsqlCommand cmd, Action<IConfigureExplainExpressions> configureExplain = null)
         {
-            var serializer = new JsonNetSerializer();
-
             var config = new ConfigureExplainExpressions();
             configureExplain?.Invoke(config);
 

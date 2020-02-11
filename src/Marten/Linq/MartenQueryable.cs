@@ -39,7 +39,7 @@ namespace Marten.Linq
 
             var cmd = CommandBuilder.ToCommand(Tenant, handler);
 
-            return Executor.As<MartenQueryExecutor>().Connection.ExplainQuery(cmd, configureExplain);
+            return Executor.As<MartenQueryExecutor>().Connection.ExplainQuery(Store.Serializer, cmd, configureExplain);
         }
 
         public IQueryable<TDoc> TransformTo<TDoc>(string transformName)

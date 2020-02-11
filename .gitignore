@@ -228,3 +228,7 @@ BenchmarkDotNet.Artifacts
 stresults.htm
 
 *.ncrunch*
+
+LastMajorVersionBinary
+
+ApiCompatBaseline.txt
