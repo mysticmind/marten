@@ -64,8 +64,8 @@ jobs:
 
       - name: Install plv8 extension
         run: |
-          docker exec postgres psql -U ${env.pg_user} -d ${env.pg_db} -c "CREATE EXTENSION IF NOT EXISTS plv8;"
-          docker exec postgres psql -U ${env.pg_user} -d ${env.pg_db} -c "DO 'plv8.elog(NOTICE, plv8.version);' LANGUAGE plv8;"
+          docker exec postgres psql -U ${{ env.pg_user }} -d ${{ env.pg_db }} -c "CREATE EXTENSION IF NOT EXISTS plv8;"
+          docker exec postgres psql -U ${{env.pg_user}} -d ${{ env.pg_db }} -c "DO 'plv8.elog(NOTICE, plv8.version);' LANGUAGE plv8;"
         shell: bash
 
       - name: Build
