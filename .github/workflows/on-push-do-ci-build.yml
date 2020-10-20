@@ -23,17 +23,16 @@ jobs:
 
     strategy:
       matrix:
-#         pg: [9.6, 10, 11, 12]
-        pg: [9.6]
+        pg: [9.6, 10, 11, 12]
         include:
           - pg: 9.6
             docker-image: mysticmind/postgres-plv8:9.6-1.4
-#           - pg: 10
-#             docker-image: ionx/postgres-plv8:10.6
-#           - pg: 11
-#             docker-image: ionx/postgres-plv8:11.5
-#           - pg: 12
-#             docker-image: oskardudycz/postgres-plv8:12-2
+          - pg: 10
+            docker-image: ionx/postgres-plv8:10.6
+          - pg: 11
+            docker-image: ionx/postgres-plv8:11.5
+          - pg: 12
+            docker-image: oskardudycz/postgres-plv8:12-2
 
     services:
       postgres:
@@ -72,5 +71,5 @@ jobs:
       - name: Build
         env:
           marten_testing_database: "Host=localhost;Port=5432;Database=${{ env.pg_db }};Username=${{ env.pg_user }}"
-        run: ./build.sh --no-color ci
+        run: ./build.sh ci
         shell: bash
