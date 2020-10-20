@@ -16,7 +16,6 @@ env:
   node_version: 10.x
   pg_db: marten_testing
   pg_user: postgres
-  marten_testing_database: "Host=localhost;Port=5432;Database=${{ env.pg_db }};Username=${{ env.pg_user }}"
 
 jobs:
   build:
@@ -71,5 +70,7 @@ jobs:
         shell: bash
 
       - name: Build
+        env:
+          marten_testing_database: "Host=localhost;Port=5432;Database=${{ env.pg_db }};Username=${{ env.pg_user }}"
         run: ./build.sh --no-color ci
         shell: bash
