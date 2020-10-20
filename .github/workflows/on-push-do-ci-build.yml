@@ -20,8 +20,10 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     strategy:
+      fail-fast: false
       matrix:
         pg: [9.6, 10, 11, 12]
         include:
