@@ -71,7 +71,8 @@ jobs:
 
       - name: Build
         env:
-          marten_testing_database: "Host=${{ postgres }};Port=5432;Database=${{ env.pg_db }};Username=${{ env.pg_user }}"
+          pg_host: postgres
+          marten_testing_database: "Host=${{ env.pg_host }};Port=5432;Database=${{ env.pg_db }};Username=${{ env.pg_user }}"
         run: |
           echo $marten_testing_database
           # ./build.sh --no-color ci
