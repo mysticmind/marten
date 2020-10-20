@@ -69,6 +69,12 @@ jobs:
           docker exec $PG_CONTAINER_NAME psql -U ${{ env.pg_user }} -d ${{ env.pg_db }} -c "CREATE EXTENSION IF NOT EXISTS plv8;"
           docker exec $PG_CONTAINER_NAME psql -U ${{env.pg_user}} -d ${{ env.pg_db }} -c "DO 'plv8.elog(NOTICE, plv8.version);' LANGUAGE plv8;"
         shell: bash
+      
+      - name: Optimize database for running tests faster
+        run: |
+          PG_CONTAINER_NAME=$(docker ps --filter expose=5432/tcp --format {{.Names}})
+          docker exec $PG_CONTAINER_NAME psql -U ${{ env.pg_user }} -c "ALTER DATABASE ${{ env.pg_db }} SET synchronous_commit TO OFF;"
+        shell: bash
 
       - name: Build
         env:
